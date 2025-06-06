@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data>
+
+    <!--  Hotel root menu -->
+    <menuitem id="menu_hotel_root" name="Hotel"/>
+
+    <!-- Rooms category -->
+    <menuitem id="menu_hotel_room_category" name="Room" parent="menu_hotel_root" sequence="1"/>
+
+    <menuitem id="menu_hotel_room" parent="menu_hotel_room_category" action="hotel_room_act_window" sequence="1"/>
+
+  </data>
+</odoo>
