@@ -15,7 +15,7 @@
     <record id="room_category_deluxe" model="hotel.room.category">
       <field name="name">Deluxe</field>
       <field name="additional_price">80000</field>
-    </record
+    </record>
 
 
     <!-- Room Equipment -->

@@ -4,6 +4,10 @@ class HotelRoom(models.Model):
     _name = 'hotel.room'
     _description = 'Hotel Room'
 
+    _sql_constraints = [
+        ('positive_price', 'CHECK(base_price >= 0)', 'The room\'s base price must be positive')
+    ]
+
     name = fields.Char(required=True)
     base_price = fields.Float(required=True)
     capacity = fields.Integer(required=True, default=2)
