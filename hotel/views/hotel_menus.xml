@@ -5,12 +5,17 @@
     <!--  Hotel root menu -->
     <menuitem id="menu_hotel_root" name="Hotel"/>
 
-    <!-- Rooms category -->
+    <!-- Rooms submenu -->
     <menuitem id="menu_hotel_room_submenu" name="Room" parent="menu_hotel_root" sequence="1"/>
 
     <menuitem id="menu_hotel_room" parent="menu_hotel_room_submenu" action="hotel_room_act_window" sequence="1"/>
     <menuitem id="menu_hotel_room_equipment" parent="menu_hotel_room_submenu" action="hotel_room_equipment_act_window" sequence="2"/>
     <menuitem id="menu_hotel_room_category" parent="menu_hotel_room_submenu" action="hotel_room_category_act_window" sequence="3"/>
+
+    <!-- Reservations submenu -->
+    <menuitem id="menu_hotel_room_reservation_submenu" name="Reservation" parent="menu_hotel_root" sequence="1"/>
+
+    <menuitem id="menu_hotel_room_reservation" parent="menu_hotel_room_reservation_submenu" action="hotel_room_reservation_act_window" sequence="1"/>
 
   </data>
 </odoo>

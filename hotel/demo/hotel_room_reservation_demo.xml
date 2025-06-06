@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+
+<!--    &lt;!&ndash; Demo Partners &ndash;&gt;-->
+<!--    <record id="partner_john_doe" model="res.partner">-->
+<!--        <field name="name">John Doe</field>-->
+<!--        <field name="email">john.doe@example.com</field>-->
+<!--    </record>-->
+
+<!--    <record id="partner_jane_smith" model="res.partner">-->
+<!--        <field name="name">Jane Smith</field>-->
+<!--        <field name="email">jane.smith@example.com</field>-->
+<!--    </record>-->
+
+<!--    <record id="partner_michael_brown" model="res.partner">-->
+<!--        <field name="name">Michael Brown</field>-->
+<!--        <field name="email">michael.brown@example.com</field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; Demo Users (Portal Users) &ndash;&gt;-->
+<!--    <record id="user_john_doe" model="res.users">-->
+<!--        <field name="login">john.doe@example.com</field>-->
+<!--        <field name="password">demo123</field>-->
+<!--        <field name="partner_id" ref="partner_john_doe"/>-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>-->
+<!--    </record>-->
+
+<!--    <record id="user_jane_smith" model="res.users">-->
+<!--        <field name="login">jane.smith@example.com</field>-->
+<!--        <field name="password">demo123</field>-->
+<!--        <field name="partner_id" ref="partner_jane_smith"/>-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>-->
+<!--    </record>-->
+
+<!--    <record id="user_michael_brown" model="res.users">-->
+<!--        <field name="login">michael.brown@example.com</field>-->
+<!--        <field name="password">demo123</field>-->
+<!--        <field name="partner_id" ref="partner_michael_brown"/>-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; Demo Reservations &ndash;&gt;-->
+<!--    <record id="reservation_john_doe" model="hotel.room.reservation">-->
+<!--        <field name="start_date">2025-06-10</field>-->
+<!--        <field name="end_date">2025-06-15</field>-->
+<!--        <field name="people_number">2</field>-->
+<!--        <field name="room_id" ref="hotel_room_101"/>-->
+<!--        <field name="client_id" ref="partner_john_doe"/>-->
+<!--        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_wifi')])]"/>-->
+<!--    </record>-->
+
+<!--    <record id="reservation_jane_smith" model="hotel.room.reservation">-->
+<!--        <field name="start_date">2025-07-01</field>-->
+<!--        <field name="end_date">2025-07-05</field>-->
+<!--        <field name="people_number">2</field>-->
+<!--        <field name="room_id" ref="hotel_room_201"/>-->
+<!--        <field name="client_id" ref="partner_jane_smith"/>-->
+<!--        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_minibar'), ref('hotel_room_equipment_safe')])]"/>-->
+<!--    </record>-->
+
+<!--    <record id="reservation_michael_brown" model="hotel.room.reservation">-->
+<!--        <field name="start_date">2025-08-15</field>-->
+<!--        <field name="end_date">2025-08-20</field>-->
+<!--        <field name="people_number">3</field>-->
+<!--        <field name="room_id" ref="hotel_room_302"/>-->
+<!--        <field name="client_id" ref="partner_michael_brown"/>-->
+<!--        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_jacuzzi'), ref('hotel_room_equipment_bathrobe')])]"/>-->
+<!--    </record>-->
+
+  </data>
+</odoo>

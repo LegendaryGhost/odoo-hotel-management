@@ -12,13 +12,17 @@
               <group>
                 <field name="name"/>
                 <field name="category_id"/>
-                <field name="equipment_ids" widget="many2many_tags"/>
               </group>
               <group>
                 <field name="base_price"/>
                 <field name="capacity"/>
               </group>
             </group>
+            <notebook>
+              <page string="Default Equipment">
+                <field name="equipment_ids"/>
+              </page>
+            </notebook>
           </sheet>
         </form>
       </field>
@@ -33,7 +37,7 @@
           <field name="base_price"/>
           <field name="category_id"/>
           <field name="capacity"/>
-          <field name="equipment_ids" string="Number of equipment"/>
+          <field name="equipment_ids" widget="many2many_tags"/>
         </list>
       </field>
     </record>

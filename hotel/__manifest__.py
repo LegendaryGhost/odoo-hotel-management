@@ -15,10 +15,12 @@
         'data/hotel_room_data.xml',
 
         'demo/hotel_room_demo.xml',
+        'demo/hotel_room_reservation_demo.xml',
 
         'views/hotel_room_views.xml',
         'views/hotel_room_category_views.xml',
         'views/hotel_room_equipment_views.xml',
+        'views/hotel_room_reservation_views.xml',
         'views/hotel_menus.xml',
     ]
 }
