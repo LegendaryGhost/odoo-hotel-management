@@ -31,7 +31,7 @@
       <field name="name">hotel.room.list</field>
       <field name="model">hotel.room</field>
       <field name="arch" type="xml">
-        <list string="Rooms">
+        <list string="Room">
           <field name="name"/>
           <field name="base_price"/>
           <field name="category_id"/>

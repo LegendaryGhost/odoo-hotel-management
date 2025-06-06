@@ -12,10 +12,13 @@
         'security/ir.model.access.csv',
         # 'security/groups.xml',
 
-        # 'data/staff_data.xml',
-        # 'data/disease_demo.xml',
+        'data/hotel_room_data.xml',
+
+        'demo/hotel_room_demo.xml',
 
         'views/hotel_room_views.xml',
+        'views/hotel_room_category_views.xml',
+        'views/hotel_room_equipment_views.xml',
         'views/hotel_menus.xml',
     ]
 }

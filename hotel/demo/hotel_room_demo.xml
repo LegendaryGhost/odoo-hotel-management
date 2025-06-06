@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+    <!-- Demo rooms -->
+    <record id="hotel_room_101" model="hotel.room">
+        <field name="name">Room 101</field>
+        <field name="base_price">100000</field>
+        <field name="capacity">2</field>
+        <field name="category_id" ref="room_category_standard"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_wifi')])]"/>
+    </record>
+
+    <record id="hotel_room_102" model="hotel.room">
+        <field name="name">Room 102</field>
+        <field name="base_price">120000</field>
+        <field name="capacity">2</field>
+        <field name="category_id" ref="room_category_standard"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_wifi'), ref('hotel_room_equipment_safe')])]"/>
+    </record>
+
+    <record id="hotel_room_201" model="hotel.room">
+        <field name="name">Room 201</field>
+        <field name="base_price">180000</field>
+        <field name="capacity">3</field>
+        <field name="category_id" ref="room_category_executive"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_ac'), ref('hotel_room_equipment_minibar'), ref('hotel_room_equipment_wifi')])]"/>
+    </record>
+
+    <record id="hotel_room_202" model="hotel.room">
+        <field name="name">Room 202</field>
+        <field name="base_price">200000</field>
+        <field name="capacity">3</field>
+        <field name="category_id" ref="room_category_executive"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_ac'), ref('hotel_room_equipment_minibar'), ref('hotel_room_equipment_wifi'), ref('hotel_room_equipment_safe')])]"/>
+    </record>
+
+    <record id="hotel_room_301" model="hotel.room">
+        <field name="name">Room 301</field>
+        <field name="base_price">250000</field>
+        <field name="capacity">4</field>
+        <field name="category_id" ref="room_category_deluxe"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_ac'), ref('hotel_room_equipment_minibar'), ref('hotel_room_equipment_wifi'), ref('hotel_room_equipment_jacuzzi')])]"/>
+    </record>
+
+    <record id="hotel_room_302" model="hotel.room">
+        <field name="name">Room 302</field>
+        <field name="base_price">270000</field>
+        <field name="capacity">4</field>
+        <field name="category_id" ref="room_category_deluxe"/>
+        <field name="equipment_ids" eval="[(6, 0, [ref('hotel_room_equipment_tv'), ref('hotel_room_equipment_ac'), ref('hotel_room_equipment_minibar'), ref('hotel_room_equipment_wifi'), ref('hotel_room_equipment_jacuzzi'), ref('hotel_room_equipment_bathrobe')])]"/>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+    <!-- Room categories -->
+    <record id="room_category_standard" model="hotel.room.category">
+      <field name="name">Standard</field>
+      <field name="additional_price">0</field>
+    </record>
+
+    <record id="room_category_executive" model="hotel.room.category">
+      <field name="name">Executive</field>
+      <field name="additional_price">30000</field>
+    </record>
+
+    <record id="room_category_deluxe" model="hotel.room.category">
+      <field name="name">Deluxe</field>
+      <field name="additional_price">80000</field>
+    </record
+
+
+    <!-- Room Equipment -->
+    <record id="hotel_room_equipment_tv" model="hotel.room.equipment">
+        <field name="name">LCD Television</field>
+        <field name="additional_price">150000</field>
+    </record>
+
+    <record id="hotel_room_equipment_ac" model="hotel.room.equipment">
+        <field name="name">Air Conditioner</field>
+        <field name="additional_price">200000</field>
+    </record>
+
+    <record id="hotel_room_equipment_minibar" model="hotel.room.equipment">
+        <field name="name">Minibar</field>
+        <field name="additional_price">100000</field>
+    </record>
+
+    <record id="hotel_room_equipment_safe" model="hotel.room.equipment">
+        <field name="name">Safe</field>
+        <field name="additional_price">50000</field>
+    </record>
+
+    <record id="hotel_room_equipment_wifi" model="hotel.room.equipment">
+        <field name="name">High-Speed Wi-Fi</field>
+        <field name="additional_price">30000</field>
+    </record>
+
+    <record id="hotel_room_equipment_bathrobe" model="hotel.room.equipment">
+        <field name="name">Bathrobe</field>
+        <field name="additional_price">20000</field>
+    </record>
+
+    <record id="hotel_room_equipment_jacuzzi" model="hotel.room.equipment">
+        <field name="name">Private Jacuzzi</field>
+        <field name="additional_price">250000</field>
+    </record>
+  </data>
+</odoo>
