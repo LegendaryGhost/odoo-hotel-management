@@ -13,4 +13,4 @@ class HotelRoom(models.Model):
     capacity = fields.Integer(required=True, default=2)
 
     category_id = fields.Many2one("hotel.room.category")
-    equipment_ids = fields.Many2many("hotel.room.equipment")
+    equipment_ids = fields.Many2many("hotel.room.equipment", string="Default Equipment")

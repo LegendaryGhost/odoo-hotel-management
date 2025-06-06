@@ -2,30 +2,27 @@
 <odoo>
   <data>
 
-<!--    <record id="ModelName_form_view" model="ir.ui.view">-->
-<!--      <field name="name">ProjectName.ModelName.form</field>-->
-<!--      <field name="model">ProjectName.ModelName</field>-->
-<!--      <field name="arch" type="xml">-->
-<!--        <form string="ModelTitle">-->
-<!--          <sheet>-->
-<!--            <div class="oe_title">-->
-<!--              <label for="example_title"/>-->
-<!--              <h1>-->
-<!--                <field name="example_title" placeholder="Title"/>-->
-<!--              </h1>-->
-<!--            </div>-->
-<!--            <group>-->
-<!--              <group>-->
-<!--                <field name="create_date"/>-->
-<!--              </group>-->
-<!--              <group>-->
-<!--                <field name="example_field"/>-->
-<!--              </group>-->
-<!--            </group>-->
-<!--          </sheet>-->
-<!--        </form>-->
-<!--      </field>-->
-<!--    </record>-->
+    <record id="view_hotel_room_form" model="ir.ui.view">
+      <field name="name">hotel.room.form</field>
+      <field name="model">hotel.room</field>
+      <field name="arch" type="xml">
+        <form string="Hotel Room">
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="equipment_ids" widget="many2many_tags"/>
+              </group>
+              <group>
+                <field name="base_price"/>
+                <field name="capacity"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
 
     <record id="hotel_room_list_view" model="ir.ui.view">
       <field name="name">hotel.room.list</field>
@@ -41,17 +38,17 @@
       </field>
     </record>
 
-<!--    <record id="ModelName_search_view" model="ir.ui.view">-->
-<!--      <field name="name">ProjectName.ModelName.search</field>-->
-<!--      <field name="model">ProjectName.ModelName</field>-->
-<!--      <field name="arch" type="xml">-->
-<!--        <search string="ModelTitle">-->
-<!--          <group expand="1" string="Group By">-->
-<!--            <filter string="Example Field" name="example_field" domain="[]" context="{'group_by':'example_field'}"/>-->
-<!--          </group>-->
-<!--        </search>-->
-<!--      </field>-->
-<!--    </record>-->
+    <!--    <record id="ModelName_search_view" model="ir.ui.view">-->
+    <!--      <field name="name">ProjectName.ModelName.search</field>-->
+    <!--      <field name="model">ProjectName.ModelName</field>-->
+    <!--      <field name="arch" type="xml">-->
+    <!--        <search string="ModelTitle">-->
+    <!--          <group expand="1" string="Group By">-->
+    <!--            <filter string="Example Field" name="example_field" domain="[]" context="{'group_by':'example_field'}"/>-->
+    <!--          </group>-->
+    <!--        </search>-->
+    <!--      </field>-->
+    <!--    </record>-->
 
     <record id="hotel_room_act_window" model="ir.actions.act_window">
       <field name="name">Room</field>
