@@ -30,6 +30,38 @@ class HotelRoomReservation(models.Model):
                 if reservation.end_date < reservation.start_date:
                     raise ValidationError("The end date cannot be before start date.")
 
+    @api.constrains("room_id", "start_date", "end_date")
+    def _check_overlapping_reservation(self):
+        for reservation in self:
+            if not reservation.room_id or not reservation.start_date or not reservation.end_date:
+                continue  # Skip if essential fields are missing
+
+            overlapping_reservations = self.env["hotel.room.reservation"].search(
+                [
+                    ('room_id', '=', reservation.room_id.id),
+                    ('id', '!=', reservation.id),
+                    '|',
+                    '|',
+                    # Check if the new reservation is inside the old one
+                    '&',
+                    ('start_date', '<=', reservation.start_date),
+                    ('end_date', '>=', reservation.start_date),
+                    '&',
+                    ('start_date', '<=', reservation.end_date),
+                    ('end_date', '>=', reservation.end_date),
+                    # Check if the new reservation is entirely contained within an old one
+                    '&',
+                    ('start_date', '>=', reservation.start_date),
+                    ('end_date', '<=', reservation.end_date),
+                ]
+            )
+            if overlapping_reservations:
+                raise ValidationError(
+                    f"The room {reservation.room_id.name} is already reserved from "
+                    f"{overlapping_reservations[0].start_date.strftime('%d/%m/%Y')} to "
+                    f"{overlapping_reservations[0].end_date.strftime('%d/%m/%Y')}."
+                )
+
     @api.depends("start_date", "days_duration")
     def _compute_end_date(self):
         for reservation in self:
