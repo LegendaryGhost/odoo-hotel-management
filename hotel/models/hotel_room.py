@@ -12,7 +12,7 @@ class HotelRoom(models.Model):
     name = fields.Char(required=True)
     base_price = fields.Float(required=True)
     capacity = fields.Integer(required=True, default=2)
-    category_price = fields.Float(related="category_id.additional_price", default=0, store=True, string="Category Price")
+    category_price = fields.Float(related="category_id.additional_price", store=True, string="Category Price")
     equipment_price = fields.Float(compute='_compute_equipment_price', default=0, store=True)
     final_price = fields.Float(compute="_compute_final_price", default=0, store=True)
 

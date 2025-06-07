@@ -1,7 +1,7 @@
 {
     'name': "Hotel",
     'version': '1.0',
-    'depends': ['base'],
+    'depends': ['base', 'website'],
     'author': "Tiarintsoa",
     'description': "An app module to manage the rooms in an hotel",
     'category': "Hotel Management",
