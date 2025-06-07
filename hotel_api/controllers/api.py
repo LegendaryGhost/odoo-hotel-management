@@ -145,6 +145,99 @@ class HotelReservationAPI(http.Controller):
             return self._get_api_response(error=str(e), status=400)
 
     # RESERVATION ENDPOINTS
+    @http.route('/api/v1/reservations', type='http', auth='public',
+                methods=['GET'], csrf=False, cors='*')
+    def get_user_reservations(self, state=None, limit=None, offset=None):
+        """Get current user's reservations"""
+        try:
+            # Check authentication
+            is_authenticated, auth_error = self._authenticate_user()
+            if not is_authenticated:
+                return self._get_api_response(error=auth_error, status=401)
+
+            # Build search domain
+            domain = [('client_id', '=', request.env.user.id)]
+
+            # Add state filter if provided
+            if state:
+                valid_states = ['draft', 'confirmed', 'in_progress', 'ended', 'ended_early', 'cancelled']
+                if state not in valid_states:
+                    return self._get_api_response(
+                        error=f"Invalid state. Valid states: {', '.join(valid_states)}",
+                        status=400
+                    )
+                domain.append(('state', '=', state))
+
+            # Parse pagination parameters
+            try:
+                limit_int = int(limit) if limit else None
+                offset_int = int(offset) if offset else 0
+
+                if limit_int is not None and limit_int <= 0:
+                    return self._get_api_response(error="Limit must be a positive integer", status=400)
+                if offset_int < 0:
+                    return self._get_api_response(error="Offset must be a non-negative integer", status=400)
+
+            except ValueError:
+                return self._get_api_response(error="Invalid limit or offset format", status=400)
+
+            # Get reservations with pagination
+            reservations = request.env['hotel.room.reservation'].sudo().search(
+                domain,
+                limit=limit_int,
+                offset=offset_int,
+                order='start_date desc'
+            )
+
+            # Get total count for pagination info
+            total_count = request.env['hotel.room.reservation'].sudo().search_count(domain)
+
+            # Format response data
+            data = []
+            for reservation in reservations:
+                data.append({
+                    'id': reservation.id,
+                    'name': reservation.name,
+                    'start_date': reservation.start_date.isoformat(),
+                    'end_date': reservation.end_date.isoformat(),
+                    'actual_end_date': reservation.actual_end_date.isoformat() if reservation.actual_end_date else None,
+                    'days_duration': reservation.days_duration,
+                    'people_number': reservation.people_number,
+                    'state': reservation.state,
+                    'room': {
+                        'id': reservation.room_id.id,
+                        'name': reservation.room_id.name,
+                        'capacity': reservation.room_id.capacity
+                    },
+                    'equipment': [{
+                        'id': eq.id,
+                        'name': eq.name,
+                        'additional_price': eq.additional_price
+                    } for eq in reservation.equipment_ids],
+                    'pricing': {
+                        'room_price': reservation.room_price,
+                        'equipment_price': reservation.equipment_price,
+                        'final_price': reservation.final_price
+                    },
+                    'can_be_ended_early': reservation.can_be_ended_early() if hasattr(reservation,
+                                                                                      'can_be_ended_early') else False
+                })
+
+            return self._get_api_response(data={
+                'reservations': data,
+                'count': len(data),
+                'total_count': total_count,
+                'pagination': {
+                    'limit': limit_int,
+                    'offset': offset_int,
+                    'has_next': (offset_int + len(data)) < total_count if limit_int else False
+                }
+            })
+
+        except Exception as e:
+            _logger.error(f"API Error in get_user_reservations: {str(e)}")
+            return self._get_api_response(error=str(e), status=500)
+
     @http.route('/api/v1/reservations/<int:reservation_id>/end', type='http', auth='public',
                 methods=['POST'], csrf=False, cors='*')
     def end_reservation_early(self, reservation_id):
@@ -170,7 +263,7 @@ class HotelReservationAPI(http.Controller):
             # Check if reservation can be ended early
             if not reservation.can_be_ended_early():
                 return self._get_api_response(
-                    error="This reservation cannot be ended early",
+                    error=f"This reservation cannot be ended early because it has not started yet or it has already ended. It can only be ended earlier between {reservation.start_date.strftime('%d/%m/%Y')} and {reservation.end_date.strftime('%d/%m/%Y')}",
                     status=400
                 )
 

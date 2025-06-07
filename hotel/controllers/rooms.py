@@ -29,7 +29,7 @@ class RoomsController(http.Controller):
             end_date = end_date_obj.strftime('%Y-%m-%d')
 
         all_rooms = request.env['hotel.room'].sudo().search([])
-        available_rooms = request.env['hotel.room'].sudo().get_available_rooms()
+        available_rooms = request.env['hotel.room'].sudo().get_available_rooms(start_date_obj, end_date_obj)
 
         return request.render('hotel.rooms_page_template', {
             'rooms': available_rooms,

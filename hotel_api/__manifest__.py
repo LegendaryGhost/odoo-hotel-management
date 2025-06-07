@@ -6,6 +6,6 @@
     'description': "An app module to manage the rooms in an hotel",
     'category': "Hotel Management",
     'installable': True,
-    'auto_install': False,
+    'auto_install': True,
     'license': 'LGPL-3',
 }

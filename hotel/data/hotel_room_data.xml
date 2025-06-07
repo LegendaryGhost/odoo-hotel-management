@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-  <data>
+  <data noupdate="1">
     <!-- Room categories -->
     <record id="room_category_standard" model="hotel.room.category">
       <field name="name">Standard</field>
