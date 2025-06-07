@@ -12,6 +12,7 @@ class HotelRoomReservation(models.Model):
 
     room_id = fields.Many2one("hotel.room", string="Reserved Room")
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Additional Equipment")
+    default_equipment_ids = fields.Many2many(related="room_id.equipment_ids")
     client_id = fields.Many2one("res.users", string="Client")
 
     @api.depends("room_id", "start_date", "end_date")

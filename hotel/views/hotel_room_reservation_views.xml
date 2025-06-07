@@ -28,6 +28,9 @@
               <page string="Additional Equipment">
                 <field name="equipment_ids"/>
               </page>
+              <page string="Default Equipment">
+                <field name="default_equipment_ids"/>
+              </page>
             </notebook>
           </sheet>
         </form>
