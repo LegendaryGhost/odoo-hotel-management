@@ -31,6 +31,75 @@ class HotelReservationAPI(http.Controller):
             return False, "Authentication required"
         return True, None
 
+    # ROOM ENDPOINTS
+    @http.route('/api/v1/rooms/available', type='http', auth='public',
+                methods=['GET'], csrf=False, cors='*')
+    def get_available_rooms(self, start_date=None, end_date=None):
+        """Get available rooms between two dates"""
+        try:
+            # Validate required parameters
+            if not start_date or not end_date:
+                return self._get_api_response(
+                    error="Missing required parameters: start_date and end_date",
+                    status=400
+                )
+
+            # Parse and validate dates
+            try:
+                start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+                end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+            except ValueError:
+                return self._get_api_response(
+                    error="Invalid date format. Use YYYY-MM-DD",
+                    status=400
+                )
+
+            # Validate date logic
+            if start_date_obj >= end_date_obj:
+                return self._get_api_response(
+                    error="End date must be after start date",
+                    status=400
+                )
+
+            # Call the existing model method
+            room_model = request.env['hotel.room']
+            available_rooms = room_model.get_available_rooms(start_date_obj, end_date_obj)
+
+            # Format response data
+            data = []
+            for room in available_rooms:
+                data.append({
+                    'id': room.id,
+                    'name': room.name,
+                    'base_price': room.base_price,
+                    'capacity': room.capacity,
+                    'category_price': room.category_price,
+                    'equipment_price': room.equipment_price,
+                    'final_price': room.final_price,
+                    'category': {
+                        'id': room.category_id.id,
+                        'name': room.category_id.name
+                    } if room.category_id else None,
+                    'equipment': [{
+                        'id': eq.id,
+                        'name': eq.name,
+                        'additional_price': eq.additional_price
+                    } for eq in room.equipment_ids]
+                })
+
+            return self._get_api_response(data={
+                'rooms': data,
+                'count': len(data),
+                'search_period': {
+                    'start_date': start_date,
+                    'end_date': end_date
+                }
+            })
+
+        except Exception as e:
+            _logger.error(f"API Error in get_available_rooms: {str(e)}")
+            return self._get_api_response(error=str(e), status=500)
+
     # EQUIPMENT ENDPOINTS
     @http.route('/api/v1/equipment', type='http', auth='public',
                 methods=['GET'], csrf=False, cors='*')
