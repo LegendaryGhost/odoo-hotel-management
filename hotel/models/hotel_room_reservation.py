@@ -54,19 +54,8 @@ class HotelRoomReservation(models.Model):
                 [
                     ('room_id', '=', reservation.room_id.id),
                     ('id', '!=', reservation.id),
-                    '|',
-                    '|',
-                    # Check if the new reservation is inside the old one
-                    '&',
-                    ('start_date', '<=', reservation.start_date),
-                    ('end_date', '>=', reservation.start_date),
-                    '&',
-                    ('start_date', '<=', reservation.end_date),
-                    ('end_date', '>=', reservation.end_date),
-                    # Check if the new reservation is entirely contained within an old one
-                    '&',
-                    ('start_date', '>=', reservation.start_date),
-                    ('end_date', '<=', reservation.end_date),
+                    ('start_date', '<', reservation.end_date),
+                    ('end_date', '>', reservation.start_date)
                 ]
             )
             if overlapping_reservations:

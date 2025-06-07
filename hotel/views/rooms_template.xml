@@ -5,6 +5,25 @@
       <t t-call="website.layout">
         <div class="container my-5">
           <h1 class="text-center mb-5">Available Rooms</h1>
+
+          <!-- Search Form -->
+          <form method="get" action="" class="row mb-5">
+            <div class="col-md-5">
+              <label for="start_date" class="form-label">Start Date</label>
+              <input type="date" name="start_date" id="start_date" class="form-control"
+                     t-att-value="start_date"/>
+            </div>
+            <div class="col-md-5">
+              <label for="end_date" class="form-label">End Date</label>
+              <input type="date" name="end_date" id="end_date" class="form-control"
+                     t-att-value="end_date"/>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+          </form>
+
+          <!-- Rooms List -->
           <div class="row">
             <t t-foreach="rooms" t-as="room">
               <div class="col-md-6 col-lg-4 mb-4">
