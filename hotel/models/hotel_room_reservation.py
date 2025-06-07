@@ -14,6 +14,7 @@ class HotelRoomReservation(models.Model):
 
     room_price = fields.Float(related="room_id.final_price", string="Room Price")
     equipment_price = fields.Float(compute='_compute_equipment_price', string="Additional Equipment Price", default=0, store=True)
+    final_price = fields.Float(compute='_compute_final_price', default=0, store=True)
 
     room_id = fields.Many2one("hotel.room", string="Reserved Room")
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Additional Equipment")
@@ -31,14 +32,14 @@ class HotelRoomReservation(models.Model):
     def _compute_end_date(self):
         for reservation in self:
             if reservation.start_date:
-                reservation.end_date = fields.Date.add(reservation.start_date, days=reservation.days_duration)
+                reservation.end_date = fields.Date.add(reservation.start_date, days=reservation.days_duration - 1)
             else:
-                reservation.end_date = fields.Date.add(fields.Date.today(), days=reservation.days_duration)
+                reservation.end_date = fields.Date.add(fields.Date.today(), days=reservation.days_duration - 1)
 
     def _inverse_end_date(self):
         for reservation in self:
             if reservation.start_date and reservation.end_date:
-                reservation.days_duration = (reservation.end_date - reservation.start_date).days
+                reservation.days_duration = (reservation.end_date - reservation.start_date).days + 1
             else:
                 reservation.days_duration = 0
 
@@ -57,3 +58,9 @@ class HotelRoomReservation(models.Model):
             if reservation.equipment_ids:
                 equipment_price = sum(reservation.equipment_ids.mapped("additional_price"))
             reservation.equipment_price = equipment_price
+
+    @api.depends("room_price", "equipment_price", "days_duration")
+    def _compute_final_price(self):
+        for reservation in self:
+            real_room_price = reservation.room_price if reservation.room_price else 0
+            reservation.final_price = (real_room_price + reservation.equipment_price) * reservation.days_duration

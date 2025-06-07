@@ -18,13 +18,14 @@
                 <field name="client_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="days_duration"/>
                 <field name="people_number"/>
                 <field name="room_id"/>
               </group>
               <group>
                 <field name="room_price"/>
                 <field name="equipment_price"/>
+                <field name="days_duration"/>
+                <field name="final_price"/>
               </group>
             </group>
             <notebook>
@@ -49,9 +50,11 @@
           <field name="client_id"/>
           <field name="start_date"/>
           <field name="end_date"/>
+          <field name="days_duration"/>
           <field name="people_number"/>
           <field name="room_id"/>
           <field name="equipment_ids" widget="many2many_tags"/>
+          <field name="final_price"/>
         </list>
       </field>
     </record>
