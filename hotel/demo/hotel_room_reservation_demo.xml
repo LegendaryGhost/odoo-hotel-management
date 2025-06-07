@@ -7,7 +7,7 @@
 <!--        <field name="name">John Doe</field>-->
 <!--        <field name="email">john.doe@example.com</field>-->
 <!--    </record>-->
-
+                  
 <!--    <record id="partner_jane_smith" model="res.partner">-->
 <!--        <field name="name">Jane Smith</field>-->
 <!--        <field name="email">jane.smith@example.com</field>-->

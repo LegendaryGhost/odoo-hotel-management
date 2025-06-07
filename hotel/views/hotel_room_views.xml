@@ -12,10 +12,13 @@
               <group>
                 <field name="name"/>
                 <field name="category_id"/>
+                <field name="capacity"/>
               </group>
               <group>
                 <field name="base_price"/>
-                <field name="capacity"/>
+                <field name="category_price"/>
+                <field name="equipment_price"/>
+                <field name="final_price"/>
               </group>
             </group>
             <notebook>
@@ -38,6 +41,7 @@
           <field name="category_id"/>
           <field name="capacity"/>
           <field name="equipment_ids" widget="many2many_tags"/>
+          <field name="final_price"/>
         </list>
       </field>
     </record>
