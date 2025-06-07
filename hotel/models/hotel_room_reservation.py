@@ -1,5 +1,5 @@
-from Tools.scripts.dutree import store
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
 class HotelRoomReservation(models.Model):
@@ -19,6 +19,13 @@ class HotelRoomReservation(models.Model):
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Additional Equipment")
     default_equipment_ids = fields.Many2many(related="room_id.equipment_ids")
     client_id = fields.Many2one("res.users", string="Client")
+
+    @api.constrains('start_date', 'end_date')
+    def _check_dates(self):
+        for reservation in self:
+            if reservation.start_date and reservation.end_date:
+                if reservation.end_date < reservation.start_date:
+                    raise ValidationError("The end date cannot be before start date.")
 
     @api.depends("start_date", "days_duration")
     def _compute_end_date(self):
