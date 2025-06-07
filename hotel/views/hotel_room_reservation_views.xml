@@ -18,10 +18,13 @@
                 <field name="client_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-              </group>
-              <group>
+                <field name="days_duration"/>
                 <field name="people_number"/>
                 <field name="room_id"/>
+              </group>
+              <group>
+                <field name="room_price"/>
+                <field name="equipment_price"/>
               </group>
             </group>
             <notebook>
