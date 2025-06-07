@@ -27,6 +27,8 @@ class HotelRoomReservation(models.Model):
     def _check_dates(self):
         for reservation in self:
             if reservation.start_date and reservation.end_date:
+                if reservation.start_date < fields.Date.today():
+                    raise ValidationError("Start date must not be in the past")
                 if reservation.end_date < reservation.start_date:
                     raise ValidationError("The end date cannot be before start date.")
 
