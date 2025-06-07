@@ -145,6 +145,69 @@ class HotelReservationAPI(http.Controller):
             return self._get_api_response(error=str(e), status=400)
 
     # RESERVATION ENDPOINTS
+    @http.route('/api/v1/reservations/<int:reservation_id>/end', type='http', auth='public',
+                methods=['POST'], csrf=False, cors='*')
+    def end_reservation_early(self, reservation_id):
+        """End a reservation early to free up the room"""
+        try:
+            # Check authentication
+            is_authenticated, auth_error = self._authenticate_user()
+            if not is_authenticated:
+                return self._get_api_response(error=auth_error, status=401)
+
+            # Get the reservation and verify it belongs to current user
+            reservation = request.env['hotel.room.reservation'].sudo().search([
+                ('id', '=', reservation_id),
+                ('client_id', '=', request.env.user.id)
+            ])
+
+            if not reservation:
+                return self._get_api_response(
+                    error="Reservation not found or you don't have permission to access it",
+                    status=404
+                )
+
+            # Check if reservation can be ended early
+            if not reservation.can_be_ended_early():
+                return self._get_api_response(
+                    error="This reservation cannot be ended early",
+                    status=400
+                )
+
+            # End the reservation early
+            reservation.action_end_early()
+
+            # Return updated reservation data
+            return self._get_api_response(data={
+                'id': reservation.id,
+                'name': reservation.name,
+                'start_date': reservation.start_date.isoformat(),
+                'end_date': reservation.end_date.isoformat(),
+                'actual_end_date': reservation.actual_end_date.isoformat() if reservation.actual_end_date else None,
+                'days_duration': reservation.days_duration,
+                'people_number': reservation.people_number,
+                'state': reservation.state,
+                'room': {
+                    'id': reservation.room_id.id,
+                    'name': reservation.room_id.name
+                },
+                'equipment': [{
+                    'id': eq.id,
+                    'name': eq.name,
+                    'additional_price': eq.additional_price
+                } for eq in reservation.equipment_ids],
+                'pricing': {
+                    'room_price': reservation.room_price,
+                    'equipment_price': reservation.equipment_price,
+                    'final_price': reservation.final_price
+                },
+                'message': 'Reservation ended successfully! Room is now available.'
+            })
+
+        except Exception as e:
+            _logger.error(f"API Error in end_reservation_early: {str(e)}")
+            return self._get_api_response(error=str(e), status=500)
+
     @http.route('/api/v1/reservations', type='http', auth='public', methods=['POST'], csrf=False, cors='*')
     def create_reservation(self):
         """Create a new reservation"""
