@@ -28,23 +28,8 @@ class RoomsController(http.Controller):
             start_date = start_date_obj.strftime('%Y-%m-%d')
             end_date = end_date_obj.strftime('%Y-%m-%d')
 
-        # Get all rooms
         all_rooms = request.env['hotel.room'].sudo().search([])
-
-        # Filter available rooms based on date range
-        available_rooms = []
-        for room in all_rooms:
-            # Check if room has any overlapping active reservations
-            overlapping_reservations = request.env['hotel.room.reservation'].sudo().search([
-                ('room_id', '=', room.id),
-                ('state', 'not in', ['cancelled']),
-                ('start_date', '<', end_date_obj),
-                ('actual_end_date', '>', start_date_obj)
-            ])
-
-            # If no overlapping reservations, room is available
-            if not overlapping_reservations:
-                available_rooms.append(room)
+        available_rooms = request.env['hotel.room'].sudo().get_available_rooms()
 
         return request.render('hotel.rooms_page_template', {
             'rooms': available_rooms,
