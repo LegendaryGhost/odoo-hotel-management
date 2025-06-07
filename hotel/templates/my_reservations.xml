@@ -83,7 +83,7 @@
                           </td>
                           <td>
                             <a t-attf-href="/my/reservation/#{reservation.id}"
-                               class="btn btn-sm btn-outline-primary">
+                               class="btn btn-sm btn-secondary">
                               View Details
                             </a>
                           </td>

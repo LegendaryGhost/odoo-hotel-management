@@ -54,7 +54,7 @@ class RoomsController(http.Controller):
             'available_rooms_count': len(available_rooms)
         })
 
-    @http.route('/room/book/<int:room_id>', type='http', auth='public', website=True)
+    @http.route('/room/book/<int:room_id>', type='http', auth='user', website=True)
     def book_room(self, room_id, **kwargs):
         # Get the room
         room = request.env['hotel.room'].sudo().browse(room_id)

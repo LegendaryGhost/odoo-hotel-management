@@ -84,9 +84,7 @@
                         <select name="people_number" id="people_number" class="form-select" required="required">
                           <t t-foreach="range(1, room.capacity + 1)" t-as="num">
                             <option t-att-value="num">
-                              <t t-esc="num"/>
-                              person
-                              <t t-if="num > 1">s</t>
+                              <t t-esc="num"/>person<t t-if="num > 1">s</t>
                             </option>
                           </t>
                         </select>
