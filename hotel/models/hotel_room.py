@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 
+
 class HotelRoom(models.Model):
     _name = 'hotel.room'
     _description = 'Hotel Room'
@@ -40,3 +41,24 @@ class HotelRoom(models.Model):
                 real_equipment_price = room.equipment_price
 
             room.final_price = room.base_price + real_category_price + real_equipment_price
+
+    def get_available_rooms(self, start_date, end_date):
+        # Get all rooms
+        all_rooms = self.env['hotel.room'].sudo().search([])
+
+        # Filter available rooms based on date range
+        available_rooms = []
+        for room in all_rooms:
+            # Check if room has any overlapping active reservations
+            overlapping_reservations = self.env['hotel.room.reservation'].sudo().search([
+                ('room_id', '=', room.id),
+                ('state', 'not in', ['cancelled']),
+                ('start_date', '<', end_date),
+                ('actual_end_date', '>', start_date)
+            ])
+
+            # If no overlapping reservations, room is available
+            if not overlapping_reservations:
+                available_rooms.append(room)
+
+        return available_rooms
