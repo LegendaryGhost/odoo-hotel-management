@@ -23,6 +23,7 @@
         'views/hotel_room_reservation_views.xml',
         'views/hotel_menus.xml',
 
+        'templates/website_menus.xml',
         'templates/available_rooms.xml',
         'templates/booking_form.xml',
         'templates/my_reservations.xml',
