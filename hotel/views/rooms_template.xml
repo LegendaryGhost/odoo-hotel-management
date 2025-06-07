@@ -23,6 +23,31 @@
             </div>
           </form>
 
+          <!-- Display Current Search Criteria -->
+          <div class="alert alert-info mb-4">
+            <div class="row">
+              <div class="col-md-8">
+                <strong>Current Search:</strong>
+                From
+                <span t-esc="start_date"/>
+                to
+                <span t-esc="end_date"/>
+              </div>
+              <div class="col-md-4 text-end">
+                <strong>Available Rooms:</strong>
+                <span t-esc="available_rooms_count"/>
+                of
+                <span t-esc="total_rooms"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- No rooms available message -->
+          <div t-if="not rooms" class="alert alert-warning text-center">
+            <h4>No rooms available</h4>
+            <p>Sorry, no rooms are available for the selected dates. Please try different dates.</p>
+          </div>
+
           <!-- Rooms List -->
           <div class="row">
             <t t-foreach="rooms" t-as="room">
@@ -59,7 +84,7 @@
                       </t>
                     </p>
                     <a href="#" class="btn btn-primary mt-auto w-100">
-                      Reserve
+                      Book
                     </a>
                   </div>
                 </div>
