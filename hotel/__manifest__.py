@@ -23,7 +23,9 @@
         'views/hotel_room_reservation_views.xml',
         'views/hotel_menus.xml',
 
-        'views/rooms_template.xml',
-        'views/booking_template.xml',
+        'templates/available_rooms.xml',
+        'templates/booking_form.xml',
+        'templates/my_reservations.xml',
+        'templates/reservation_detail.xml',
     ]
 }

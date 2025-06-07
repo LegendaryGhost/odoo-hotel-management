@@ -21,10 +21,46 @@ class HotelRoomReservation(models.Model):
     equipment_price = fields.Float(compute='_compute_equipment_price', string="Additional Equipment Price", default=0, store=True)
     final_price = fields.Float(compute='_compute_final_price', default=0, store=True)
 
+    state = fields.Selection([
+        ('active', 'Active'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('ended_early', 'Ended Early')
+    ], default='active', string='Status', required=True)
+    freeing_date = fields.Date(string='Early End Date', help='Date when the reservation was ended early')
+    actual_end_date = fields.Date(compute='_compute_actual_end_date', store=True, string='Actual End Date')
+
     room_id = fields.Many2one("hotel.room", string="Reserved Room", required=True)
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Additional Equipment")
     default_equipment_ids = fields.Many2many(related="room_id.equipment_ids")
     client_id = fields.Many2one("res.users", string="Client", required=True)
+
+    def action_end_early(self):
+        """Method to end reservation early"""
+        self.ensure_one()
+        if self.state == 'active':
+            self.write({
+                'state': 'ended_early',
+                'freeing_date': fields.Date.today()
+            })
+            return True
+        return False
+
+    def can_be_ended_early(self):
+        """Check if reservation can be ended early"""
+        self.ensure_one()
+        today = fields.Date.today()
+        return (self.state == 'active' and
+                self.start_date <= today < self.end_date)
+
+    @api.depends('state', 'freeing_date', 'end_date')
+    def _compute_actual_end_date(self):
+        """Compute the actual end date considering early ending"""
+        for record in self:
+            if record.state == 'ended_early' and record.freeing_date:
+                record.actual_end_date = record.freeing_date
+            else:
+                record.actual_end_date = record.end_date
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):
@@ -55,7 +91,8 @@ class HotelRoomReservation(models.Model):
                     ('room_id', '=', reservation.room_id.id),
                     ('id', '!=', reservation.id),
                     ('start_date', '<', reservation.end_date),
-                    ('end_date', '>', reservation.start_date)
+                    ('actual_end_date', '>', reservation.start_date),
+                    ('state', 'not in', ['cancelled']),
                 ]
             )
             if overlapping_reservations:

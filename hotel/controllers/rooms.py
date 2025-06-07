@@ -34,11 +34,12 @@ class RoomsController(http.Controller):
         # Filter available rooms based on date range
         available_rooms = []
         for room in all_rooms:
-            # Check if room has any overlapping reservations
+            # Check if room has any overlapping active reservations
             overlapping_reservations = request.env['hotel.room.reservation'].sudo().search([
                 ('room_id', '=', room.id),
+                ('state', 'not in', ['cancelled']),
                 ('start_date', '<', end_date_obj),
-                ('end_date', '>', start_date_obj)
+                ('actual_end_date', '>', start_date_obj)
             ])
 
             # If no overlapping reservations, room is available
@@ -92,7 +93,8 @@ class RoomsController(http.Controller):
                 'end_date': kwargs.get('end_date'),
                 'room_id': int(kwargs.get('room_id')),
                 'people_number': int(kwargs.get('people_number', 1)),
-                'client_id': request.env.user.id
+                'client_id': request.env.user.id,
+                'state': 'active'  # Set initial state
             }
 
             # Handle equipment selection
@@ -115,4 +117,68 @@ class RoomsController(http.Controller):
         except Exception as e:
             return request.render('hotel.booking_error_template', {
                 'error_message': str(e)
+            })
+
+    @http.route('/my/reservations', type='http', auth='user', website=True)
+    def my_reservations(self, **kwargs):
+        """Display current user's reservations"""
+        # Get current user's reservations
+        reservations = request.env['hotel.room.reservation'].sudo().search([
+            ('client_id', '=', request.env.user.id)
+        ], order='start_date desc')
+
+        return request.render('hotel.my_reservations_template', {
+            'reservations': reservations
+        })
+
+    @http.route('/my/reservation/<int:reservation_id>', type='http', auth='user', website=True)
+    def reservation_detail(self, reservation_id, **kwargs):
+        """Display reservation details"""
+        # Get the reservation and verify it belongs to current user
+        reservation = request.env['hotel.room.reservation'].sudo().search([
+            ('id', '=', reservation_id),
+            ('client_id', '=', request.env.user.id)
+        ])
+
+        if not reservation:
+            return request.redirect('/my/reservations')
+
+        return request.render('hotel.reservation_detail_template', {
+            'reservation': reservation
+        })
+
+    @http.route('/my/reservation/<int:reservation_id>/end', type='http', auth='user', methods=['POST'], website=True,
+                csrf=False)
+    def end_reservation_early(self, reservation_id, **kwargs):
+        """End a reservation early"""
+        try:
+            # Get the reservation and verify it belongs to current user
+            reservation = request.env['hotel.room.reservation'].sudo().search([
+                ('id', '=', reservation_id),
+                ('client_id', '=', request.env.user.id)
+            ])
+
+            if not reservation:
+                return request.redirect('/my/reservations')
+
+            # Check if reservation can be ended early
+            if reservation.can_be_ended_early():
+                reservation.action_end_early()
+                message = "Reservation ended successfully!"
+                message_type = "success"
+            else:
+                message = "This reservation cannot be ended early."
+                message_type = "error"
+
+            return request.render('hotel.reservation_detail_template', {
+                'reservation': reservation,
+                'message': message,
+                'message_type': message_type
+            })
+
+        except Exception as e:
+            return request.render('hotel.reservation_detail_template', {
+                'reservation': reservation,
+                'message': f"Error ending reservation: {str(e)}",
+                'message_type': "error"
             })
