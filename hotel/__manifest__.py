@@ -1,7 +1,7 @@
 {
     'name': "Hotel",
     'version': '1.0',
-    'depends': ['base'],
+    'depends': ['base', 'website'],
     'author': "Tiarintsoa",
     'description': "An app module to manage the rooms in an hotel",
     'category': "Hotel Management",
@@ -9,15 +9,24 @@
     'installable': True,
     'license': 'LGPL-3',
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         # 'security/groups.xml',
 
-        # 'data/staff_data.xml',
-        # 'data/disease_demo.xml',
+        'data/hotel_room_data.xml',
 
-        # 'views/hospital_disease_views.xml',
-        # 'views/hospital_symptom_views.xml',
-        # 'views/hospital_request_views.xml',
-        # 'views/hospital_menus.xml',
+        'demo/hotel_room_demo.xml',
+        'demo/hotel_room_reservation_demo.xml',
+
+        'views/hotel_room_views.xml',
+        'views/hotel_room_category_views.xml',
+        'views/hotel_room_equipment_views.xml',
+        'views/hotel_room_reservation_views.xml',
+        'views/hotel_menus.xml',
+
+        'templates/website_menus.xml',
+        'templates/available_rooms.xml',
+        'templates/booking_form.xml',
+        'templates/my_reservations.xml',
+        'templates/reservation_detail.xml',
     ]
 }

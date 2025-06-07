@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="reservation_detail_template" name="Reservation Details">
+    <t t-call="website.layout">
+      <div id="wrap" class="oe_structure oe_empty">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="page-header">
+                <h1>Reservation Details</h1>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="/my/reservations">My Reservations</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Reservation #
+                      <span t-esc="reservation.name or reservation.id"/>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          <!-- Display messages -->
+          <t t-if="message">
+            <div class="row">
+              <div class="col-lg-12">
+                <div
+                    t-attf-class="alert alert-#{message_type == 'success' and 'success' or 'danger'} alert-dismissible fade show"
+                    role="alert">
+                  <span t-esc="message"/>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                </div>
+              </div>
+            </div>
+          </t>
+
+          <div class="row">
+            <div class="col-lg-8">
+              <!-- Reservation Information Card -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h4 class="card-title mb-0">
+                    Reservation Information
+                    <t t-if="reservation.state == 'active'">
+                      <span class="badge badge-success ml-2">Active</span>
+                    </t>
+                    <t t-elif="reservation.state == 'completed'">
+                      <span class="badge badge-primary ml-2">Completed</span>
+                    </t>
+                    <t t-elif="reservation.state == 'cancelled'">
+                      <span class="badge badge-danger ml-2">Cancelled</span>
+                    </t>
+                    <t t-elif="reservation.state == 'ended_early'">
+                      <span class="badge badge-warning ml-2">Ended Early</span>
+                    </t>
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <table class="table table-borderless">
+                        <tr>
+                          <td>
+                            <strong>Reservation ID:</strong>
+                          </td>
+                          <td t-esc="reservation.name or reservation.id"/>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Start Date:</strong>
+                          </td>
+                          <td t-esc="reservation.start_date"/>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>End Date:</strong>
+                          </td>
+                          <td t-esc="reservation.end_date"/>
+                        </tr>
+                        <tr t-if="reservation.state == 'ended_early' and reservation.freeing_date">
+                          <td>
+                            <strong>Early End Date:</strong>
+                          </td>
+                          <td>
+                            <span class="text-warning" t-esc="reservation.freeing_date"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Duration:</strong>
+                          </td>
+                          <td>
+                            <span t-esc="reservation.days_duration"/>
+                            days
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="col-md-6">
+                      <table class="table table-borderless">
+                        <tr>
+                          <td>
+                            <strong>Number of People:</strong>
+                          </td>
+                          <td t-esc="reservation.people_number"/>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Room Price:</strong>
+                          </td>
+                          <td>
+                            <span t-esc="reservation.room_price"/>
+                            Ar
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Equipment Price:</strong>
+                          </td>
+                          <td>
+                            <span t-esc="reservation.equipment_price"/>
+                            Ar
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Total Price:</strong>
+                          </td>
+                          <td>
+                            <strong>
+                              <span t-esc="reservation.final_price"/>
+                              Ar
+                            </strong>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Room Information Card -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h4 class="card-title mb-0">Room Information</h4>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h5 t-esc="reservation.room_id.name"/>
+                      <p class="text-muted" t-esc="reservation.room_id.category_id.name"/>
+                    </div>
+                    <div class="col-md-6">
+                      <table class="table table-sm table-borderless">
+                        <tr t-if="reservation.room_id.capacity">
+                          <td>
+                            <strong>Capacity:</strong>
+                          </td>
+                          <td t-esc="reservation.room_id.capacity"/>
+                          <td>people</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Equipment Information Card -->
+              <t t-if="reservation.equipment_ids">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h4 class="card-title mb-0">Additional Equipment</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <t t-foreach="reservation.equipment_ids" t-as="equipment">
+                        <div class="col-md-6 mb-2">
+                          <div class="d-flex justify-content-between">
+                            <span t-esc="equipment.name"/>
+                            <span class="text-muted">
+                              <span t-esc="equipment.price"/>
+                              Ar
+                            </span>
+                          </div>
+                        </div>
+                      </t>
+                    </div>
+                  </div>
+                </div>
+              </t>
+            </div>
+
+            <div class="col-lg-4">
+              <!-- Actions Card -->
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title mb-0">Actions</h4>
+                </div>
+                <div class="card-body">
+                  <a href="/my/reservations" class="btn btn-secondary w-100 mb-2">
+                    Back to My Reservations
+                  </a>
+
+                  <t t-if="reservation.can_be_ended_early()">
+                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                            data-bs-target="#endReservationModal">
+                      End Reservation Early
+                    </button>
+                  </t>
+
+                  <t t-elif="reservation.state == 'active'">
+                    <p class="text-muted small mt-2">
+                      This reservation cannot be ended early because it hasn't started yet or has already ended.
+                    </p>
+                  </t>
+                </div>
+              </div>
+
+              <!-- Status Information -->
+              <div class="card mt-3">
+                <div class="card-header">
+                  <h4 class="card-title mb-0">Status Information</h4>
+                </div>
+                <div class="card-body">
+                  <p>
+                    <strong>Current Status:</strong>
+                    <t t-if="reservation.state == 'active'">
+                      <span class="text-success">Active</span>
+                    </t>
+                    <t t-elif="reservation.state == 'completed'">
+                      <span class="text-primary">Completed</span>
+                    </t>
+                    <t t-elif="reservation.state == 'cancelled'">
+                      <span class="text-danger">Cancelled</span>
+                    </t>
+                    <t t-elif="reservation.state == 'ended_early'">
+                      <span class="text-warning">Ended Early</span>
+                    </t>
+                  </p>
+
+                  <t t-if="reservation.state == 'ended_early' and reservation.freeing_date">
+                    <p>
+                      <strong>Ended on:</strong>
+                      <span t-esc="reservation.freeing_date"/>
+                    </p>
+                  </t>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- End Reservation Modal -->
+        <div class="modal fade" id="endReservationModal" tabindex="-1"
+             aria-labelledby="endReservationModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="endReservationModalLabel">End Reservation Early</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to end this reservation early?</p>
+                <p class="text-muted small">
+                  This action cannot be undone. The room will become available from today onwards.
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form t-attf-action="/my/reservation/#{reservation.id}/end" method="post" style="display: inline;">
+                  <button type="submit" class="btn btn-warning">End Reservation</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+</odoo>
