@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
   <data>
+    <!-- Rooms Page Template -->
     <template id="rooms_page_template" name="Rooms Page">
       <t t-call="website.layout">
         <div class="container my-5">
@@ -83,7 +84,8 @@
                         <span class="text-muted">No equipment</span>
                       </t>
                     </p>
-                    <a href="#" class="btn btn-primary mt-auto w-100">
+                    <a t-attf-href="/room/book/#{room.id}?start_date=#{start_date}&amp;end_date=#{end_date}"
+                       class="btn btn-primary mt-auto w-100">
                       Book
                     </a>
                   </div>

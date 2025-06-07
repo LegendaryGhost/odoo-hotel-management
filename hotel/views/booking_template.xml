@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+    <!-- Booking Form Template -->
+    <template id="booking_form_template" name="Booking Form">
+      <t t-call="website.layout">
+        <div class="container my-5">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                  <h2 class="mb-0">Book Room:
+                    <t t-esc="room.name"/>
+                  </h2>
+                </div>
+                <div class="card-body">
+                  <!-- Room Information -->
+                  <div class="row mb-4">
+                    <div class="col-md-6">
+                      <h5>Room Details</h5>
+                      <p>
+                        <strong>Name:</strong>
+                        <t t-esc="room.name"/>
+                      </p>
+                      <p>
+                        <strong>Capacity:</strong>
+                        <t t-esc="room.capacity"/>
+                        person(s)
+                      </p>
+                      <p>
+                        <strong>Base Price:</strong>
+                        Ar
+                        <t t-esc="room.final_price"/>
+                        per night
+                      </p>
+                      <p>
+                        <strong>Category:</strong>
+                        <t t-esc="room.category_id.name or 'Standard'"/>
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <h5>Booking Summary</h5>
+                      <p>
+                        <strong>Check-in:</strong>
+                        <t t-esc="start_date"/>
+                      </p>
+                      <p>
+                        <strong>Check-out:</strong>
+                        <t t-esc="end_date"/>
+                      </p>
+                      <p>
+                        <strong>Duration:</strong>
+                        <t t-esc="duration_days"/>
+                        night(s)
+                      </p>
+                      <p>
+                        <strong>Room Total:</strong>
+                        Ar
+                        <t t-esc="room.final_price * duration_days"/>
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Booking Form -->
+                  <form method="post" action="/room/book/submit">
+                    <input type="hidden" name="room_id" t-att-value="room.id"/>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control"
+                               t-att-value="start_date" required="required"/>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control"
+                               t-att-value="end_date" required="required"/>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label for="people_number" class="form-label">Number of People</label>
+                        <select name="people_number" id="people_number" class="form-select" required="required">
+                          <t t-foreach="range(1, room.capacity + 1)" t-as="num">
+                            <option t-att-value="num">
+                              <t t-esc="num"/>
+                              person
+                              <t t-if="num > 1">s</t>
+                            </option>
+                          </t>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Equipment Selection -->
+                    <div class="mb-4">
+                      <h5>Additional Equipment</h5>
+                      <div class="row">
+                        <t t-if="room.equipment_ids">
+                          <div class="col-12 mb-3">
+                            <h6>Included Equipment:</h6>
+                            <t t-foreach="room.equipment_ids" t-as="eq">
+                              <span class="badge bg-secondary me-1 mb-1">
+                                <t t-esc="eq.name"/>
+                                (Included)
+                              </span>
+                            </t>
+                          </div>
+                        </t>
+
+                        <t t-if="all_equipment">
+                          <div class="col-12">
+                            <h6>Optional Additional Equipment:</h6>
+                            <t t-foreach="all_equipment" t-as="equipment">
+                              <t t-if="equipment not in room.equipment_ids">
+                                <div class="form-check mb-2">
+                                  <input class="form-check-input" type="checkbox"
+                                         t-attf-name="equipment_#{equipment.id}"
+                                         t-attf-id="equipment_#{equipment.id}"/>
+                                  <label class="form-check-label" t-attf-for="equipment_#{equipment.id}">
+                                    <t t-esc="equipment.name"/>
+                                    <span class="text-muted">(+Ar
+                                      <t t-esc="equipment.additional_price"/>
+                                      per night)
+                                    </span>
+                                  </label>
+                                </div>
+                              </t>
+                            </t>
+                          </div>
+                        </t>
+                      </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                      <a href="/rooms" class="btn btn-outline-secondary btn-lg me-md-2">Back to Rooms</a>
+                      <button type="submit" class="btn btn-primary btn-lg">Confirm Booking</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+
+    <!-- Booking Success Template -->
+    <template id="booking_success_template" name="Booking Success">
+      <t t-call="website.layout">
+        <div class="container my-5">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div class="alert alert-success text-center">
+                <h2 class="mb-3">🎉 Booking Confirmed!</h2>
+                <p class="lead">Your reservation has been successfully created.</p>
+
+                <div class="card mt-4">
+                  <div class="card-header">
+                    <h4>Reservation Details</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p>
+                          <strong>Reservation ID:</strong>
+                          <t t-esc="reservation.name"/>
+                        </p>
+                        <p>
+                          <strong>Room:</strong>
+                          <t t-esc="reservation.room_id.name"/>
+                        </p>
+                        <p>
+                          <strong>Dates:</strong>
+                          <t t-esc="reservation.start_date"/>
+                          to
+                          <t t-esc="reservation.end_date"/>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <p>
+                          <strong>People:</strong>
+                          <t t-esc="reservation.people_number"/>
+                        </p>
+                        <p>
+                          <strong>Duration:</strong>
+                          <t t-esc="reservation.days_duration"/>
+                          night(s)
+                        </p>
+                        <p>
+                          <strong>Total Price:</strong>
+                          Ar
+                          <t t-esc="reservation.final_price"/>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <a href="/rooms" class="btn btn-primary me-2">Book Another Room</a>
+                  <a href="/" class="btn btn-outline-secondary">Back to Home</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+
+    <!-- Booking Error Template -->
+    <template id="booking_error_template" name="Booking Error">
+      <t t-call="website.layout">
+        <div class="container my-5">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div class="alert alert-danger text-center">
+                <h2 class="mb-3">❌ Booking Failed</h2>
+                <p class="lead">There was an error processing your reservation.</p>
+
+                <div class="alert alert-warning mt-3">
+                  <strong>Error:</strong>
+                  <t t-esc="error_message"/>
+                </div>
+
+                <div class="mt-4">
+                  <a href="/rooms" class="btn btn-primary me-2">Back to Rooms</a>
+                  <a href="javascript:history.back()" class="btn btn-outline-secondary">Try Again</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>

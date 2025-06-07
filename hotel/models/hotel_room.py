@@ -16,7 +16,7 @@ class HotelRoom(models.Model):
     equipment_price = fields.Float(compute='_compute_equipment_price', default=0, store=True)
     final_price = fields.Float(compute="_compute_final_price", default=0, store=True)
 
-    category_id = fields.Many2one("hotel.room.category")
+    category_id = fields.Many2one("hotel.room.category", required=True)
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Default Equipment")
     reservation_ids = fields.One2many("hotel.room.reservation", "room_id", string="Reservations")
 

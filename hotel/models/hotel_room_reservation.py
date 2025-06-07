@@ -21,10 +21,10 @@ class HotelRoomReservation(models.Model):
     equipment_price = fields.Float(compute='_compute_equipment_price', string="Additional Equipment Price", default=0, store=True)
     final_price = fields.Float(compute='_compute_final_price', default=0, store=True)
 
-    room_id = fields.Many2one("hotel.room", string="Reserved Room")
+    room_id = fields.Many2one("hotel.room", string="Reserved Room", required=True)
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Additional Equipment")
     default_equipment_ids = fields.Many2many(related="room_id.equipment_ids")
-    client_id = fields.Many2one("res.users", string="Client")
+    client_id = fields.Many2one("res.users", string="Client", required=True)
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):

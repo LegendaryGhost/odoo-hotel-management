@@ -52,3 +52,67 @@ class RoomsController(http.Controller):
             'total_rooms': len(all_rooms),
             'available_rooms_count': len(available_rooms)
         })
+
+    @http.route('/room/book/<int:room_id>', type='http', auth='public', website=True)
+    def book_room(self, room_id, **kwargs):
+        # Get the room
+        room = request.env['hotel.room'].sudo().browse(room_id)
+        if not room.exists():
+            return request.redirect('/rooms')
+
+        # Get date parameters from URL
+        start_date = kwargs.get('start_date', datetime.now().strftime('%Y-%m-%d'))
+        end_date = kwargs.get('end_date', (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
+
+        # Get all available equipment
+        all_equipment = request.env['hotel.room.equipment'].sudo().search([])
+
+        # Calculate duration in days
+        try:
+            start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+            duration_days = (end_date_obj - start_date_obj).days + 1
+        except ValueError:
+            duration_days = 1
+
+        return request.render('hotel.booking_form_template', {
+            'room': room,
+            'start_date': start_date,
+            'end_date': end_date,
+            'duration_days': duration_days,
+            'all_equipment': all_equipment
+        })
+
+    @http.route('/room/book/submit', type='http', auth='user', methods=['POST'], website=True, csrf=False)
+    def submit_booking(self, **kwargs):
+        try:
+            # Create the reservation
+            reservation_data = {
+                'start_date': kwargs.get('start_date'),
+                'end_date': kwargs.get('end_date'),
+                'room_id': int(kwargs.get('room_id')),
+                'people_number': int(kwargs.get('people_number', 1)),
+                'client_id': request.env.user.id
+            }
+
+            # Handle equipment selection
+            equipment_ids = []
+            for key, value in kwargs.items():
+                if key.startswith('equipment_') and value == 'on':
+                    equipment_id = int(key.replace('equipment_', ''))
+                    equipment_ids.append(equipment_id)
+
+            if equipment_ids:
+                reservation_data['equipment_ids'] = [(6, 0, equipment_ids)]
+
+            # Create reservation
+            reservation = request.env['hotel.room.reservation'].sudo().create(reservation_data)
+
+            return request.render('hotel.booking_success_template', {
+                'reservation': reservation
+            })
+
+        except Exception as e:
+            return request.render('hotel.booking_error_template', {
+                'error_message': str(e)
+            })

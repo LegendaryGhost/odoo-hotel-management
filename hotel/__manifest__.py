@@ -24,5 +24,6 @@
         'views/hotel_menus.xml',
 
         'views/rooms_template.xml',
+        'views/booking_template.xml',
     ]
 }
