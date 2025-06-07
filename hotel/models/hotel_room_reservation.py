@@ -7,6 +7,9 @@ class HotelRoomReservation(models.Model):
     _description = 'Hotel Room Reservation'
 
     _order = "start_date DESC"
+    _sql_constraints = [
+        ('positive_people_number', 'CHECK(people_number > 0)', 'The number of people must be strictly positive')
+    ]
 
     name = fields.Char(compute='_compute_name', store=True)
     start_date = fields.Date(required=True, default=fields.Date.today())
@@ -31,6 +34,15 @@ class HotelRoomReservation(models.Model):
                     raise ValidationError("Start date must not be in the past")
                 if reservation.end_date < reservation.start_date:
                     raise ValidationError("The end date cannot be before start date.")
+
+    @api.constrains("room_id", "people_number")
+    def _check_people_number(self):
+        for reservation in self:
+            if not reservation.room_id or not reservation.people_number:
+                continue
+            if reservation.people_number > reservation.room_id.capacity:
+                raise ValidationError(f"The number of people cannot be greater than the room capacity ({reservation.room_id.capacity})")
+
 
     @api.constrains("room_id", "start_date", "end_date")
     def _check_overlapping_reservation(self):

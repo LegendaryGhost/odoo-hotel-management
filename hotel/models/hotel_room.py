@@ -5,7 +5,8 @@ class HotelRoom(models.Model):
     _description = 'Hotel Room'
 
     _sql_constraints = [
-        ('positive_price', 'CHECK(base_price >= 0)', 'The room\'s base price must be positive')
+        ('positive_price', 'CHECK(base_price >= 0)', 'The room\'s base price must be positive'),
+        ('positive_capacity', 'CHECK(capacity >= 0)', 'The room\'s capacity must be positive'),
     ]
 
     name = fields.Char(required=True)
