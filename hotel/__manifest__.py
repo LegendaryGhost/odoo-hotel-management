@@ -22,5 +22,7 @@
         'views/hotel_room_equipment_views.xml',
         'views/hotel_room_reservation_views.xml',
         'views/hotel_menus.xml',
+
+        'views/rooms_template.xml',
     ]
 }

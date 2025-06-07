@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <data>
+    <template id="rooms_page_template" name="Rooms Page">
+      <t t-call="website.layout">
+        <div class="container my-5">
+          <h1 class="text-center mb-5">Available Rooms</h1>
+          <div class="row">
+            <t t-foreach="rooms" t-as="room">
+              <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body d-flex flex-column">
+                    <h4 class="card-title mb-2">
+                      <t t-esc="room.name"/>
+                    </h4>
+                    <p class="card-text mb-1">
+                      <strong>Price:</strong>
+                      <t t-esc="room.final_price"/>
+                    </p>
+                    <p class="card-text mb-1">
+                      <strong>Capacity:</strong>
+                      <t t-esc="room.capacity"/>
+                      person(s)
+                    </p>
+                    <p class="card-text mb-1">
+                      <strong>Category:</strong>
+                      <t t-esc="room.category_id.name or 'N/A'"/>
+                    </p>
+                    <p class="card-text mb-3">
+                      <strong>Equipment:</strong>
+                      <t t-if="room.equipment_ids">
+                        <t t-foreach="room.equipment_ids" t-as="eq">
+                          <span class="badge bg-secondary me-1">
+                            <t t-esc="eq.name"/>
+                          </span>
+                        </t>
+                      </t>
+                      <t t-if="not room.equipment_ids">
+                        <span class="text-muted">No equipment</span>
+                      </t>
+                    </p>
+                    <a href="#" class="btn btn-primary mt-auto w-100">
+                      Reserve
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </div>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>
