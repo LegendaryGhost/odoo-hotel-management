@@ -46,7 +46,7 @@
       <field name="model">hotel.room.reservation</field>
       <field name="arch" type="xml">
         <list string="Room Reservation">
-          <field name="name"/>
+          <field name="room_id"/>
           <field name="client_id"/>
           <field name="start_date"/>
           <field name="end_date"/>

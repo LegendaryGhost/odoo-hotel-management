@@ -1,5 +1,3 @@
-from email.policy import default
-
 from odoo import models, fields, api
 
 class HotelRoom(models.Model):
@@ -19,6 +17,7 @@ class HotelRoom(models.Model):
 
     category_id = fields.Many2one("hotel.room.category")
     equipment_ids = fields.Many2many("hotel.room.equipment", string="Default Equipment")
+    reservation_ids = fields.One2many("hotel.room.reservation", "room_id", string="Reservations")
 
     @api.depends("equipment_ids")
     def _compute_equipment_price(self):

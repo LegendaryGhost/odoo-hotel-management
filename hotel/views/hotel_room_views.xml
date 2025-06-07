@@ -25,6 +25,9 @@
               <page string="Default Equipment">
                 <field name="equipment_ids"/>
               </page>
+              <page string="Reservations">
+                <field name="reservation_ids"/>
+              </page>
             </notebook>
           </sheet>
         </form>

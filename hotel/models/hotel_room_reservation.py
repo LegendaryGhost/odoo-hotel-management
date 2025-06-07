@@ -6,6 +6,8 @@ class HotelRoomReservation(models.Model):
     _name = 'hotel.room.reservation'
     _description = 'Hotel Room Reservation'
 
+    _order = "start_date DESC"
+
     name = fields.Char(compute='_compute_name', store=True)
     start_date = fields.Date(required=True, default=fields.Date.today())
     end_date = fields.Date(compute="_compute_end_date", inverse="_inverse_end_date", store=True)
