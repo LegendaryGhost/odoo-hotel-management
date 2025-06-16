@@ -181,7 +181,7 @@
                           <div class="d-flex justify-content-between">
                             <span t-esc="equipment.name"/>
                             <span class="text-muted">
-                              <span t-esc="equipment.price"/>
+                              <span t-esc="equipment.additional_price"/>
                               Ar
                             </span>
                           </div>

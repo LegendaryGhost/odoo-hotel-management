@@ -1,5 +1,5 @@
 {
-    'name': "Hotel",
+    'name': "Hotel Managemenent System",
     'version': '1.0',
     'depends': ['base', 'website'],
     'author': "Tiarintsoa",
