@@ -26,14 +26,14 @@ A comprehensive hotel room reservation management system built on Odoo 18, featu
 ## 📋 Requirements
 
 - Odoo 18.0+
-- Python 3.8+
-- PostgreSQL 12+
+- Python 3.11+
+- PostgreSQL 13+
 
 ## 🚀 Installation
 
 1. Clone the repository to your Odoo addons directory:
     ```bash
-    git clone [repository-url] /path/to/odoo/addons/hotel
+    git clone https://github.com/LegendaryGhost/odoo-hotel-management /path/to/odoo/addons/hotel
     ```
 
 2. Update your Odoo addons path to include the hotel module
@@ -141,28 +141,6 @@ For easy API testing and integration, we provide a comprehensive Postman collect
 2. Open Postman
 3. Click "Import" in the top left
 4. Select the downloaded collection file
-5. Configure the environment variables:
-   - `base_url`: Your Odoo instance URL (e.g., `http://localhost:8069`)
-   - `username`: Your Odoo username
-   - `password`: Your Odoo password
-
-### Collection Structure
-```
-Hotel Reservation API/
-├── Authentication/
-│   └── Login
-├── Rooms/
-│   ├── Get Available Rooms
-│   └── Get Available Rooms (with filters)
-├── Equipment/
-│   ├── Get All Equipment
-│   └── Get Equipment Details
-└── Reservations/
-    ├── Get My Reservations
-    ├── Get My Reservations (filtered)
-    ├── Create Reservation
-    └── End Reservation Early
-```
 
 ## 🏗️ Database Schema
 
